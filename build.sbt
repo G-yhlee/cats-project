@@ -1,11 +1,39 @@
-val scala3Version = "3.2.2"
+// .settings 대체
+// version := "0.1.0-SNAPSHOT",
+// scalaVersion := scala3Version,
 
-lazy val p1 = (project in file("modules/p1")).settings(
-  name := "p1",
-  version := "0.1.0-SNAPSHOT",
-  scalaVersion := scala3Version,
-  libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
-)
+ThisBuild / scalaVersion := V.Scala
+ThisBuild / version := "0.0.1-SNAPSHOT"
+
+val V = new {
+  val Scala = "3.3.0-RC4"
+}
+
+val Dependencies = new {
+  lazy val p1_plain = Seq(
+    libraryDependencies ++= Seq(
+    )
+  )
+  lazy val p2_cats = Seq(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % "3.5.0"
+    )
+  )
+}
+
+lazy val p1_plain = (project in file("modules/p1_plain"))
+  .settings(
+    name := "p1_plain",
+    Dependencies.p1_plain
+  )
+lazy val p2_cats = (project in file("modules/p2_cats"))
+  .settings(
+    name := "p2_cats",
+    Dependencies.p2_cats
+  )
 
 lazy val root = (project in file("."))
-  .aggregate(p1)
+  .aggregate(
+    p1_plain,
+    p2_cats
+  )
